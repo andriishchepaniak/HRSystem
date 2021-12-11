@@ -6,17 +6,6 @@ using System.Threading.Tasks;
 
 namespace HR.DAL.Models
 {
-    //public enum Degree
-    //{
-    //    Assistant,
-    //    Docent,
-    //    Proffessor
-    //}
-    //public enum Role
-    //{
-    //    Employee,
-    //    Admin
-    //}
     public class Employee : IBaseEntity
     {
         public int Id { get; set; }
