@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HR.DAL.Models
+﻿namespace HR.DAL.Models
 {
     public interface IBaseEntity
     {
         int Id { get; set; }
+        string Email { get; set; }
     }
 }
