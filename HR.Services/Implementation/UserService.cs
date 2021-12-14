@@ -27,6 +27,54 @@ namespace HR.Services.Implementation
                 .FirstOrDefaultAsync(e => e.Email == email);
         }
 
+        public async Task<List<Employee>> GetSortedByDate(int offset = 0, int count = 10)
+        {
+            return await _context.Employees
+                .Include(e => e.Role)
+                .Include(e => e.Education)
+                .Include(e => e.Adress)
+                .OrderBy(e => e.DateOfBirth)
+                .Skip(offset)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Employee>> GetSortedByFaculty(int offset = 0, int count = 10)
+        {
+            return await _context.Employees
+                .Include(e => e.Role)
+                .Include(e => e.Education)
+                .Include(e => e.Adress)
+                .OrderBy(e => e.Faculty)
+                .Skip(offset)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Employee>> GetSortedByName(int offset = 0, int count = 10)
+        {
+            return await _context.Employees
+                .Include(e => e.Role)
+                .Include(e => e.Education)
+                .Include(e => e.Adress)
+                .OrderBy(e => e.LastName)
+                .ThenBy(e => e.FirstName)
+                .Skip(offset)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Employee>> Search(string search)
+        {
+            return await _context.Employees
+                .Include(e => e.Role)
+                .Include(e => e.Education)
+                .Include(e => e.Adress)
+                .Where(e => e.LastName.ToLower().Contains(search.ToLower()) 
+                    || e.FirstName.ToLower().Contains(search.ToLower()))
+                .ToListAsync();
+        }
+
         public async Task<List<Employee>> ShowAll()
         {
             return await _context.Employees
