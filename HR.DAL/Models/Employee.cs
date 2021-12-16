@@ -22,6 +22,7 @@ namespace HR.DAL.Models
         public Role Role { get; set; }
         public Education Education { get; set; }
         public Address Adress { get; set; }
+        public string ImageURL { get; set; }
     }
     
 }

@@ -3,6 +3,12 @@ using HR.DAL.Models;
 using HR.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using System.IO;
+using System;
+using System.Configuration;
+using System.Net;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace HR.Services.Implementation
 {
@@ -33,7 +39,26 @@ namespace HR.Services.Implementation
 
         public async Task<Employee> Update(Employee employee)
         {
-            _context.Employees.Update(employee);
+            string FileName = Path.GetFileNameWithoutExtension(employee.ImageURL);
+ 
+            FileName = DateTime.Now.ToString("yyyyMMdd") + "-" + FileName.Trim() + ".jpg";
+            string UploadPath = ConfigurationManager.AppSettings["HRSystem/images/"].ToString();
+
+            using (WebClient webClient = new WebClient())
+            {
+                byte[] data = webClient.DownloadData(employee.ImageURL);
+
+                using (MemoryStream mem = new MemoryStream(data))
+                {
+                    using (var yourImage = Image.FromStream(mem))
+                    {
+                        yourImage.Save(UploadPath + FileName, ImageFormat.Jpeg);
+                    }
+                }
+
+            }
+            employee.ImageURL = UploadPath + FileName;
+
             await _context.SaveChangesAsync();
             return employee;
         }
