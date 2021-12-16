@@ -4,6 +4,7 @@ using HR.Services.Implementation;
 using HR.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -65,11 +66,22 @@ namespace HRsystem
                       }
                     });
             });
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRewriter(new RewriteOptions()
+            .AddRedirect("Login.html", "Login")
+            .AddRewrite("Login", "Login.html", skipRemainingRules: false)
+            .AddRedirect("Register.html", "Register")
+            .AddRewrite("Register", "Register.html", skipRemainingRules: false)
+            .AddRedirect("MainPage.html", "MainPage")
+            .AddRewrite("MainPage", "MainPage.html", skipRemainingRules: false));
+
+            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,7 +92,6 @@ namespace HRsystem
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 

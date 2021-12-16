@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #17a2b8;
+    height: 100vh;
+    background-image: url('../images/background.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+  #auth .container #auth-row #auth-column #auth-box {
+    margin-top: 120px;
+    max-width: 600px;
+    height: 320px;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+  }
+
+  #auth .container #auth-row #auth-column #auth-register-box {
+    margin-top: 130px;
+    max-width: 600px;
+    height: 640px;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+  }
+
+  #auth .container #auth-row #auth-column #auth-box #auth-form {
+    padding: 20px;
+  }
+
+  #auth-register-form{
+    padding: 20px;
+  }
+
+  #auth .container #auth-row #auth-column #auth-box #auth-form #register-link {
+    margin-top: -70px;
+  }
+
+  .toast {
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%, 0px);
+    z-index: 9999;
+  }
+
+  #main-content-wrapper {
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+  }
+  #card-wrapper{
+    margin: auto;
+    padding: 10px;
+    width: 310px;
+  }
+  .card{
+    padding: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 18rem;
+  }

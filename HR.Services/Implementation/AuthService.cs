@@ -22,9 +22,9 @@ namespace HR.Services.Implementation
             _context = context;
         }
 
-        public async Task<string> Login(string username, string password)
+        public async Task<string> Login(string email, string password)
         {
-            var identity = await GetIdentity(username, password);
+            var identity = await GetIdentity(email, password);
             if (identity == null)
             {
                 throw new ArgumentException("Invalid username or password.");
@@ -56,13 +56,16 @@ namespace HR.Services.Implementation
             return jwt;
         }
 
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {
             var person = await _context.Employees
                 .Include(e => e.Role)
                 .Include(e => e.Education)
                 .Include(e => e.Adress)
-                .FirstOrDefaultAsync(e => e.Email == username);
+                .FirstOrDefaultAsync(e => e.Email == email);
+
+            if (person == null)
+                return null;
 
             var checkPassword = await CheckPasswordAsync(person, password);
 
@@ -92,7 +95,7 @@ namespace HR.Services.Implementation
             return Task.FromResult(false);
         }
 
-        public async Task<string> RegisterNewUser(string email, string password)
+        public async Task RegisterNewUser(string email, string password, string university, string firstname, string lastname)
         {
             var person = await _context.Employees
                 .Include(e => e.Role)
@@ -108,12 +111,15 @@ namespace HR.Services.Implementation
             Employee value = new Employee();
             value.Email = email;
             value.Password = password;
+            value.FirstName = firstname;
+            value.LastName = lastname;
             value.Role = _context.Roles.FirstOrDefault(x => x.RoleName == "User");
+            value.Education = new Education();
+            value.Education.University = university;
+            value.Adress = new Address();
 
             var result = await _context.Employees.AddAsync(value);
             await _context.SaveChangesAsync();
-
-            return JsonSerializer.Serialize(result);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace HRsystem
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseWebRoot("HRSystem");
                     webBuilder.UseStartup<Startup>();
                 });
     }

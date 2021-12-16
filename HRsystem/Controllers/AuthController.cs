@@ -1,6 +1,8 @@
 ﻿using HR.Services.Interfaces;
+using HRsystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace HRsystem.Controllers
@@ -17,20 +19,33 @@ namespace HRsystem.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login([FromBody]LoginViewModel loginView)
         {
-            var res = await _authService.Login(username, password);
-
-            return Ok(res);
+            try
+            {
+                var res = await _authService.Login(loginView.email, loginView.password);
+                return Ok(res);
+            } 
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel registerView)
         {
-            var res = await _authService.RegisterNewUser(username, password);
-
-            return Ok(res);
+            try
+            {             
+                await _authService.RegisterNewUser(registerView.Email, registerView.Password, registerView.University, registerView.FirstName, registerView.LastName);
+                var res = await _authService.Login(registerView.Email, registerView.Password);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
